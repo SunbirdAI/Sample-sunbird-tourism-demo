@@ -1,0 +1,5 @@
+streamlit
+openai
+requests
+streamlit-audiorec
+watchdog

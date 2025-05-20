@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.log
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+*.env
+
+# Streamlit
+.streamlit/config.toml
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# dotenv environment files
+.env
+.env.*
+
+# VSCode
+.vscode/
+
+# Pytest cache
+.pytest_cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+.tox/
+.nox/
+.cache/
+
+# Misc
+*.sqlite3
+*.db
+*.mypy_cache/
+*.pylint.d/
+*.pytest_cache/
+*.coverage.*
+*.mo
+*.pot
+*.pyc
+
+# Ignore data/output folders if any
+data/
+output/
