@@ -2,12 +2,13 @@ from openai import OpenAI
 import os
 import requests
 import backoff  # pip install backoff
+import streamlit as st
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
-RUNPOD_API_KEY = os.getenv("SUNBIRD_RUNPOD_API_KEY")
-RUNPOD_ENDPOINT_ID = os.getenv("SUNBIRD_RUNPOD_ENDPOINT_ID")
+RUNPOD_API_KEY = os.getenv("SUNBIRD_RUNPOD_API_KEY", st.secrets["SUNBIRD_RUNPOD_API_KEY"])
+RUNPOD_ENDPOINT_ID = os.getenv("SUNBIRD_RUNPOD_ENDPOINT_ID", st.secrets["SUNBIRD_RUNPOD_ENDPOINT_ID"])
 MODEL_NAME = "patrickcmd/gemma3-12b-ug40-merged"
 
 if not RUNPOD_API_KEY:
@@ -20,6 +21,7 @@ client = OpenAI(
     base_url=f"https://api.runpod.ai/v2/{RUNPOD_ENDPOINT_ID}/openai/v1",
 )
 
+@backoff.on_exception(backoff.expo, requests.exceptions.RequestException, max_tries=5)
 def ug40_translate(instruction: str, language: str) -> str:
     """
     Translates the given instruction into the specified language using a multilingual instruction-tuned model.
@@ -49,10 +51,11 @@ def ug40_translate(instruction: str, language: str) -> str:
         raise Exception("Translation failed.") from e
 
 
+@backoff.on_exception(backoff.expo, requests.exceptions.RequestException, max_tries=5)
 def translate(text, source_language, target_language):
     try:
         url = "https://api.sunbird.ai/tasks/nllb_translate"
-        token = os.getenv("AUTH_TOKEN")
+        token = os.getenv("AUTH_TOKEN", st.secrets["AUTH_TOKEN"])
         headers = {
             "accept": "application/json",
             "Authorization": f"Bearer {token}",
@@ -80,7 +83,10 @@ def translate_texts(texts: list, source_language: str = "eng", target_language: 
         print(f"Translating line: {line}")
         if not line:
             continue
-        translated_texts.append(translate(line, source_language, target_language) + "\n")
+        try:
+            translated_texts.append(translate(line, source_language, target_language) + "\n")
+        except Exception as e:
+            return "**Error:** Some thing wrong happened! Please try again."
     final_text = "".join(translated_texts)
     return final_text
 

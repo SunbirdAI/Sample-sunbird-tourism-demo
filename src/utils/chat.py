@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY", st.secrets["OPENAI_API_KEY"]))
 
 
 def tourism_answer(question: str, lang: str) -> str:
