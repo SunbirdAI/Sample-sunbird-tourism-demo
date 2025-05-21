@@ -1,5 +1,6 @@
 import streamlit as st
 from openai import OpenAI
+import logging
 
 from src.config import DEFAULT_MODEL, SUPPORTED_LANGUAGES, ASR_LANGUAGE_CODES
 from src.utils.asr import transcribe_audio
@@ -10,13 +11,15 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY", st.secrets["OPENAI_API_KEY"]))
 
 
 def tourism_answer(question: str, lang: str) -> str:
-    print(f"Answering question: {question} in language: {lang}")
-    print(f"ASR language code: {ASR_LANGUAGE_CODES[lang]}")
+    logger.info(f"Answering question: {question} in language: {lang}")
+    logger.info(f"ASR language code: {ASR_LANGUAGE_CODES[lang]}")
     if lang == "English":
         # Use the default model for English
         messages = [
@@ -27,7 +30,7 @@ def tourism_answer(question: str, lang: str) -> str:
     else:
         # Use the translation model for other languages
         question = ug40_translate(question, "English")
-        print(f"Translated question: {question}")
+        logger.info(f"Translated question: {question}")
         messages = [
             {"role": "system", "content": "You are a friendly Jinja tour guide. Reply only in English."},
             {"role": "user", "content": question},
@@ -36,7 +39,7 @@ def tourism_answer(question: str, lang: str) -> str:
         response = call_openai(messages)
         response_texts = response.split("\n")
         translated_response = translate_texts(response_texts, ASR_LANGUAGE_CODES["English"], ASR_LANGUAGE_CODES[lang])
-        print(f"Translated response: {translated_response}")
+        logger.info(f"Translated response: {translated_response}")
         return translated_response
     
 
@@ -54,15 +57,15 @@ def call_openai(messages, model=DEFAULT_MODEL):
             input=prompt_str,
             model=model,
         )
-        print(f"OpenAI response: {resp.output_text}")
+        logger.info(f"OpenAI response: {resp.output_text}")
         return resp.output_text.strip()
     except Exception as exc:
-        print(f"OpenAI error: {exc}")
+        logger.error(f"OpenAI error: {exc}")
         st.error(f"OpenAI error: {exc}")
         return "(Sorry, something went wrong.)"
 
 def handle_chat_interaction(language: str):
-    print(f"Handling chat interaction for language: {language}")
+    logger.info(f"Handling chat interaction for language: {language}")
     lang_key = f"{language}_chat"
     st.session_state.chat_history = st.session_state.get("chat_history", {})
     st.session_state.chat_history.setdefault(lang_key, [])

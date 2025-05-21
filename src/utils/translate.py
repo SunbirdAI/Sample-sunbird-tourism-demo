@@ -4,8 +4,11 @@ import requests
 import backoff  # pip install backoff
 import streamlit as st
 from dotenv import load_dotenv, find_dotenv
+import logging
 
 load_dotenv(find_dotenv())
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 RUNPOD_API_KEY = os.getenv("SUNBIRD_RUNPOD_API_KEY", st.secrets["SUNBIRD_RUNPOD_API_KEY"])
 RUNPOD_ENDPOINT_ID = os.getenv("SUNBIRD_RUNPOD_ENDPOINT_ID", st.secrets["SUNBIRD_RUNPOD_ENDPOINT_ID"])
@@ -47,7 +50,7 @@ def ug40_translate(instruction: str, language: str) -> str:
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
-        print(f"Error in translation: {e}")
+        logger.error(f"Error in translation: {e}")
         raise Exception("Translation failed.") from e
 
 
@@ -73,14 +76,14 @@ def translate(text, source_language, target_language):
         # print(f"Response: {response.json()}")
         return response.json()["output"].get("translated_text")
     except Exception as e:
-        print(f"Error in translation: {e}")
+        logger.error(f"Error in translation: {e}")
         raise Exception("Translation failed.") from e
 
 def translate_texts(texts: list, source_language: str = "eng", target_language: str = "lug") -> str:
     translated_texts = []
     for line in texts:
         line = line.strip()
-        print(f"Translating line: {line}")
+        logger.info(f"Translating line: {line}")
         if not line:
             continue
         try:
