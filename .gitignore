@@ -59,3 +59,4 @@ htmlcov/
 # Ignore data/output folders if any
 data/
 output/
+.streamlit/

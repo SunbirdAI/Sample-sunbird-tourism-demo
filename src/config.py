@@ -1,5 +1,8 @@
 import os
 import streamlit as st
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # ENV VARS
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")

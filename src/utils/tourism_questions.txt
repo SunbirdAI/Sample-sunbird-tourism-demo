@@ -1,0 +1,24 @@
+Where can I find the source of the Nile?
+What cultural experiences can I have in Jinja City?
+What are the best restaurants in Jinja City?
+What are the top tourist attractions in Jinja city?
+Where can I go white-water rafting in Jinja?
+Where can I try local Ugandan food in Jinja?
+What adventure activities are available in Jinja?
+
+# Luganda
+Nsobola kusanga wa ensibuko y'omugga Kiyira?
+Bintu ki eby'obuwangwa bye nsobola okufuna mu kibuga ky'e Jinja?
+Wooteeri ki ezisingayo obulungi mu kibuga ky'e Jinja?
+Biki ebisinga okusikiriza abalambuzi mu kibuga ky'e Jinja?
+Nsobola kugenda wa okuvuga amazzi amanene e Jinja?
+Nsobola kugezesa wa emmere ya Uganda eya wano e Jinja?
+Mirimu ki egy'okubuukabuuka egiri e Jinja?
+
+# Runyakole
+Nimbaasa kushanga nkahi oburugo bw'omugyera Nile?
+Ni bintu ki eby'obuhangwa ebi ndikubaasa kutunga omu rurembo rwa Jinja?
+Ni hooteeri ki ezirikukirayo oburungi omu rurembo rwa Jinja?
+Ni bintu ki ebirikukirayo kureeta abarambuzi omu rurembo rwa Jinja?
+Nimbaasa kugyezaho nkahi eby'okurya bya Uganda omuri Jinja?
+Ni mirimo ki y'okushemererwa eriho omuri Jinja?
