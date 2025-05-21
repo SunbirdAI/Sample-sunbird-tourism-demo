@@ -12,25 +12,32 @@ from __future__ import annotations
 import os
 from typing import Dict, List
 
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"),
+api_key=os.getenv("OPENAI_API_KEY"))
+from openai import OpenAI
 import requests
 import streamlit as st
 from st_audiorec import st_audiorec
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # ──────────────────────────────────────────────────────────────────────────────
 # 🔧 CONFIGURATION & CONSTANTS
 # ──────────────────────────────────────────────────────────────────────────────
-openai.api_key = os.getenv("OPENAI_API_KEY")
 if not openai.api_key:
     st.error("OPENAI_API_KEY environment variable not set. Please set it for the app to function.")
 SUNBIRD_ASR_URL = os.getenv("SUNBIRD_ASR_URL", "https://api.sunbird.ai/speech-to-text")
+client = OpenAI()
 
 SUPPORTED_LANGUAGES: Dict[str, str] = {
     "English": "English",
     "Runyankole": "Runyankole",
     "Luganda": "Luganda",
 }
-DEFAULT_MODEL = "gpt-3.5-turbo"  # upgrade to gpt-4o if you have access
+DEFAULT_MODEL = "gpt-4o-mini"
 
 # Sunbird palette (WCAG‑friendly)
 SUNBIRD_PRIMARY   = "#FF8200"  # vivid orange
@@ -115,8 +122,8 @@ def validate_input(text: str) -> bool:
 def call_openai(messages: List[Dict[str, str]], model: str = DEFAULT_MODEL) -> str:
     """Wrapper around OpenAI Chat Completion."""
     try:
-        resp = openai.ChatCompletion.create(model=model, messages=messages)
-        return resp.choices[0].message.content.strip()
+        resp = client.responses.create(model=model, input=messages)
+        return resp.output_text
     except Exception as exc:
         st.error(f"OpenAI error: {exc}")
         return "(Sorry, something went wrong.)"
@@ -307,14 +314,16 @@ def transcribe_audio(language: str, audio_bytes: bytes) -> str:
 # This code is a simplified version of the original app.py and utils.
 
 import streamlit as st
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"),
+api_key=os.getenv("OPENAI_API_KEY"))
 from src.config import DEFAULT_MODEL, SUPPORTED_LANGUAGES
 from src.utils.asr import transcribe_audio
 from src.utils.common import validate_input
 import streamlit as st
 import os
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def tourism_answer(question: str, lang: str) -> str:
     messages = [
@@ -325,7 +334,7 @@ def tourism_answer(question: str, lang: str) -> str:
 
 def call_openai(messages, model=DEFAULT_MODEL):
     try:
-        resp = openai.ChatCompletion.create(model=model, messages=messages)
+        resp = client.chat.completions.create(model=model, messages=messages)
         return resp.choices[0].message.content.strip()
     except Exception as exc:
         st.error(f"OpenAI error: {exc}")

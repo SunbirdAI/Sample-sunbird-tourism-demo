@@ -6,11 +6,7 @@ st.set_page_config(layout="wide", page_title="Jinja Tourism Assistant — Sunbir
 
 
 from src.config import SUPPORTED_LANGUAGES
-from src.utils.asr import transcribe_audio
 from src.utils.chat import handle_chat_interaction
-from src.utils.translator import handle_translation_tab
-
-# apply_styling()
 
 
 st.sidebar.image("img/sunbird-favicon.jpg", use_container_width=True)
@@ -29,14 +25,4 @@ ui_language = st.sidebar.selectbox("Choose language", list(SUPPORTED_LANGUAGES.k
 st.title("Enroute UG")
 st.caption("From the hills to the city we speak your journey.")
 
-# chat_tab, translate_tab = st.tabs(["🗣️ Chat", "🔄 Translate"])
-# chat_tab = st.tabs(["🗣️ Chat"])
-
-
-# with chat_tab:
-#     handle_chat_interaction(ui_language)
-
 handle_chat_interaction(ui_language)
-
-# with translate_tab:
-#     handle_translation_tab()
