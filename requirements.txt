@@ -1,4 +1,7 @@
+backoff
 streamlit
+streamlit-audiorec
 openai
 requests
 watchdog
+python-dotenv
